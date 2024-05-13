@@ -1,3 +1,4 @@
+install.packages("libr")
 install.packages("stringr")
 library(stringr)
 
@@ -40,3 +41,10 @@ boxplot(Value~Feature_id, data=subenglish)
 plot(red_english_no_NaN$Feature_id, red_english_no_NaN$Value)
 subgerman$Feature_Name
 hist(subgerman$Value)
+
+tapply(sorted_de$Value, sorted_de$Feature_id, sd)
+tapply(sorted_de$Value, sorted_de$Feature_id, mean)
+summary(sorted_de$Value, sorted_de$Feature_id)
+
+sorted_de1 <- tapply(sorted_de$Value, sorted_de$Feature_id, sd) == 0
+sorted_de1
