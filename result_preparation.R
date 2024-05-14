@@ -32,19 +32,30 @@ red_german_no_NaN <- semi_join(german_no_NaN,english_no_NaN, by="Feature_id")
 sorted_en <- red_english_no_NaN[order(red_english_no_NaN$Feature_id),]
 sorted_de <- red_german_no_NaN[order(red_german_no_NaN$Feature_id),]
 
-#create a subset for Feature with respective ID
-subgerman <- sorted_de[sorted_de$Feature_id < 35, ]
-subenglish <- sorted_en[sorted_en$Feature_id < 35,]
-
-summary(subenglish)
-boxplot(Value~Feature_id, data=subenglish)
-plot(red_english_no_NaN$Feature_id, red_english_no_NaN$Value)
-subgerman$Feature_Name
-hist(subgerman$Value)
+#create subsets for Feature(s) with respective ID
+subgerman <- subset(sorted_de, Feature_id ==101 | Feature_id ==183 | 
+                      Feature_id ==160 | Feature_id==184 | Feature_id ==343 |
+                      Feature_id ==729)
+subenglish <- subset(sorted_en, Feature_id ==101 | Feature_id ==183 | 
+                       Feature_id ==160 | Feature_id==184 | Feature_id ==343 |
+                       Feature_id ==729)
 
 tapply(sorted_de$Value, sorted_de$Feature_id, sd)
-tapply(sorted_de$Value, sorted_de$Feature_id, mean)
+tapply(sorted_de$Value, sorted_de$Feature_Name, sd)
 summary(sorted_de$Value, sorted_de$Feature_id)
+tapply(Unique_Words_de$Value, Unique_Words_de$Feature_id, mean)
 
-sorted_de1 <- tapply(sorted_de$Value, sorted_de$Feature_id, sd) == 0
-sorted_de1
+Unique_Words_de <- subset(sorted_de, Feature_id == 854)
+Unique_Words_en <- subset(sorted_en, Feature_id == 854)
+
+attach(mtcars)
+par(mfrow=c(1,2))
+hist(Unique_Words_de$Value, ylim=c(0,60),xlim=c(0,200))
+hist(Unique_Words_en$Value, xlim=c(0,200))
+
+plot(Unique_Words_de$Value)
+plot(Unique_Words_en$Value)
+boxplot(Value~Feature_id, data=Unique_Words_de, ylim=c(0,350),xlab="Deutsch",
+        ylab="Number of unique words")
+boxplot(Value~Feature_id, data=Unique_Words_en, ylim=c(0,350),xlab="Englisch",
+        ylab="")
