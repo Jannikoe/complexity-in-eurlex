@@ -1,36 +1,35 @@
 install.packages("libr")
 install.packages("stringr")
 library(stringr)
+library(dplyr)
+library(tidyr)
+library(tidyverse)
 
-#load datasets
-german <- read.csv("results_de_100.csv", stringsAsFactors = FALSE)
-english <- read.csv("results_en_100.csv", stringsAsFactors = FALSE)
+#load and shape datasets
+german <- read.csv("results_deutsch_100.csv", stringsAsFactors = FALSE, sep="\t")
+english <- read.csv("results_english_100.csv", stringsAsFactors = FALSE, sep="\t")
 
-# Split name column into individual feature clumns (\t-separated)
-german[c('Text_id', 'Tags', 'Text_Title', 'Feature_id', 'Feature_Name', 'Value')] <- str_split_fixed(german$"Text_id.Tags.Text_Title.Feature_id.Feature_Name.Value", '\t', 6)
-english[c('Text_id', 'Tags', 'Text_Title', 'Feature_id', 'Feature_Name', 'Value')] <- str_split_fixed(english$"Text_id.Tags.Text_Title.Feature_id.Feature_Name.Value", '\t', 6)
+reshaped_de <- select(german, Text_Title, Feature_id, Value)
+reshaped_de <- pivot_wider(reshaped_de, names_from = Text_Title, values_from = Value)
 
-# Rearrange columns and remove original name column
-german <- german[c('Text_id', 'Tags', 'Text_Title', 'Feature_id', 'Feature_Name', 'Value')]
-english <- english[c('Text_id', 'Tags', 'Text_Title', 'Feature_id', 'Feature_Name', 'Value')]
-
-# exclude NaN Values
-german_no_NaN <- german[german$Value != "NaN",]
-english_no_NaN <- english[english$Value != "NaN",]
-
-# convert characters into numbers for 'Value' and 'Feature_id'
-german_no_NaN$Value <- as.numeric(as.character(german_no_NaN$Value))
-english_no_NaN$Value <- as.numeric(as.character(english_no_NaN$Value))
-german_no_NaN$Feature_id <- as.numeric(as.character(german_no_NaN$Feature_id))
-english_no_NaN$Feature_id <- as.numeric(as.character(english_no_NaN$Feature_id))
+reshaped_en <- select(english, Text_Title, Feature_id, Value)
+reshaped_en <- pivot_wider(reshaped_en, names_from = Text_Title, values_from = Value)
 
 #find the common features in the analysis
-red_english_no_NaN <- semi_join(english_no_NaN, german_no_NaN, by="Feature_id")
-red_german_no_NaN <- semi_join(german_no_NaN,english_no_NaN, by="Feature_id")
+red_english <- semi_join(reshaped_en, reshaped_de, by="Feature_id")
+red_german <- semi_join(reshaped_de, reshaped_en, by="Feature_id")
 
-#sort by Feature_id
-sorted_en <- red_english_no_NaN[order(red_english_no_NaN$Feature_id),]
-sorted_de <- red_german_no_NaN[order(red_german_no_NaN$Feature_id),]
+red_english1 <- column_to_rownames(red_english, var="Feature_id")
+red_english1 <- red_english1[order(as.numeric(row.names(red_english1))),]
+red_english1 <- t(red_english1)
+
+red_german1 <- column_to_rownames(red_german, var="Feature_id")
+red_german1 <- red_german1[order(as.numeric(row.names(red_german1))),]
+red_german1 <- t(red_german1)
+
+# find NaN Values
+NAs_de <- which(is.na(red_german1), arr.ind=TRUE)
+NAs_en <- which(is.na(red_english1), arr.ind=TRUE)
 
 #create subsets for Feature(s) with respective ID
 subgerman <- subset(sorted_de, Feature_id ==101 | Feature_id ==183 | 
@@ -40,10 +39,10 @@ subenglish <- subset(sorted_en, Feature_id ==101 | Feature_id ==183 |
                        Feature_id ==160 | Feature_id==184 | Feature_id ==343 |
                        Feature_id ==729)
 
-tapply(sorted_de$Value, sorted_de$Feature_id, sd)
-tapply(sorted_de$Value, sorted_de$Feature_Name, sd)
+apply(red_german1, 2, sd)
+apply(red_english1, 2, sd)
+apply(red_german1, 2, mean)
 summary(sorted_de$Value, sorted_de$Feature_id)
-tapply(Unique_Words_de$Value, Unique_Words_de$Feature_id, mean)
 
 Unique_Words_de <- subset(sorted_de, Feature_id == 854)
 Unique_Words_en <- subset(sorted_en, Feature_id == 854)
