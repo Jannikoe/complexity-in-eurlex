@@ -27,34 +27,39 @@ red_german1 <- column_to_rownames(red_german, var="Feature_id")
 red_german1 <- red_german1[order(as.numeric(row.names(red_german1))),]
 red_german1 <- t(red_german1)
 
-# find NaN Values
+# find and exclude features with NaN Values
 NAs_de <- which(is.na(red_german1), arr.ind=TRUE)
 NAs_en <- which(is.na(red_english1), arr.ind=TRUE)
 
+red_english2 <- subset(red_english1, select = -c(15,17,40,71,74,115,127,161))
+red_german2 <- subset(red_german1, select = -c(15,17,40,71,74,115,127,161))
+
+# find and exclude features with SD = 0
+which(apply(red_german2, 2, sd)==0, arr.ind = TRUE)
+which(apply(red_english2, 2, sd)==0, arr.ind = TRUE)
+red_english3 <- subset(red_english2, select = -c(4,28,49,60,75,100,122,170,199,
+                                                 278,292,343,355,359))
+red_german3 <- subset(red_german2, select = -c(4,28,49,60,75,100,122,170,199,
+                                               278,292,343,355,359))
+
 #create subsets for Feature(s) with respective ID
-subgerman <- subset(sorted_de, Feature_id ==101 | Feature_id ==183 | 
-                      Feature_id ==160 | Feature_id==184 | Feature_id ==343 |
-                      Feature_id ==729)
-subenglish <- subset(sorted_en, Feature_id ==101 | Feature_id ==183 | 
-                       Feature_id ==160 | Feature_id==184 | Feature_id ==343 |
-                       Feature_id ==729)
+subgerman <- red_german3[,c('101','183','160','184','729'),drop=FALSE]
+subenglish <- red_english3[,c('101','183','160','184','729'),drop=FALSE]
 
-apply(red_german1, 2, sd)
-apply(red_english1, 2, sd)
-apply(red_german1, 2, mean)
-summary(sorted_de$Value, sorted_de$Feature_id)
+apply(red_english3, 2, sd)
+apply(red_german3, 2, sd)
 
-Unique_Words_de <- subset(sorted_de, Feature_id == 854)
-Unique_Words_en <- subset(sorted_en, Feature_id == 854)
+Unique_Words_de <- red_german3[,'854']
+Unique_Words_en <- red_english3[,'854']
 
 attach(mtcars)
 par(mfrow=c(1,2))
-hist(Unique_Words_de$Value, ylim=c(0,60),xlim=c(0,200))
-hist(Unique_Words_en$Value, xlim=c(0,200))
+hist(Unique_Words_de, ylim=c(0,60),xlim=c(0,200))
+hist(Unique_Words_en, xlim=c(0,200))
 
-plot(Unique_Words_de$Value)
-plot(Unique_Words_en$Value)
-boxplot(Value~Feature_id, data=Unique_Words_de, ylim=c(0,350),xlab="Deutsch",
+plot(Unique_Words_de)
+plot(Unique_Words_en)
+boxplot(Unique_Words_de, ylim=c(0,350),xlab="Deutsch",
         ylab="Number of unique words")
-boxplot(Value~Feature_id, data=Unique_Words_en, ylim=c(0,350),xlab="Englisch",
+boxplot(Unique_Words_en, ylim=c(0,350),xlab="Englisch",
         ylab="")
