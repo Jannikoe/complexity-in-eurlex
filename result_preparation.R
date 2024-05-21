@@ -1,8 +1,8 @@
 install.packages("libr")
 install.packages("stringr")
-library(stringr)
 library(dplyr)
 library(tidyr)
+library(stringr)
 library(tidyverse)
 
 #load and shape datasets
@@ -28,8 +28,8 @@ red_german1 <- red_german1[order(as.numeric(row.names(red_german1))),]
 red_german1 <- t(red_german1)
 
 # find and exclude features with NaN Values
-NAs_de <- which(is.na(red_german1), arr.ind=TRUE)
-NAs_en <- which(is.na(red_english1), arr.ind=TRUE)
+which(is.na(red_german1), arr.ind=TRUE)
+which(is.na(red_english1), arr.ind=TRUE)
 
 red_english2 <- subset(red_english1, select = -c(15,17,40,71,74,115,127,161))
 red_german2 <- subset(red_german1, select = -c(15,17,40,71,74,115,127,161))
@@ -37,6 +37,7 @@ red_german2 <- subset(red_german1, select = -c(15,17,40,71,74,115,127,161))
 # find and exclude features with SD = 0
 which(apply(red_german2, 2, sd)==0, arr.ind = TRUE)
 which(apply(red_english2, 2, sd)==0, arr.ind = TRUE)
+
 red_english3 <- subset(red_english2, select = -c(4,28,49,60,75,100,122,170,199,
                                                  278,292,343,355,359))
 red_german3 <- subset(red_german2, select = -c(4,28,49,60,75,100,122,170,199,
@@ -46,7 +47,8 @@ red_german3 <- subset(red_german2, select = -c(4,28,49,60,75,100,122,170,199,
 subgerman <- red_german3[,c('101','183','160','184','729'),drop=FALSE]
 subenglish <- red_english3[,c('101','183','160','184','729'),drop=FALSE]
 
-apply(red_english3, 2, sd)
+sds <- apply(red_english3, 2, sd)
+View(sds)
 apply(red_german3, 2, sd)
 
 Unique_Words_de <- red_german3[,'854']
