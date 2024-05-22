@@ -1,3 +1,7 @@
+#z-transform given dataframes
+red_english3_z <- scale(red_english3)
+red_german3_z <- scale(red_german3)
+
 #create subsets for Feature(s) with respective ID
 subgerman <- red_german3[,c('101','183','160','184','729'),drop=FALSE]
 subenglish <- red_english3[,c('101','183','160','184','729'),drop=FALSE]
