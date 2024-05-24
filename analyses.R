@@ -32,3 +32,11 @@ red_german3[50,20]
 red_german3["de_49.txt","80"]
 Unique_Words_de[]
 View(Unique_Words_de)
+
+NA_columns_en <- red_english1[,NA_indices$col]
+NA_columns_de <- red_german1[,NA_indices$col]
+NA_columns <- rbind(NA_columns_de,NA_columns_en)
+
+hist(syntactic_de_z[,"101"])
+
+#red_comp <- rbind(red_german3,red_english3)
