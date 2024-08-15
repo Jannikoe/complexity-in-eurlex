@@ -1,4 +1,4 @@
-Linguistische Komplexität in juristischen Texten - eine crosslinguistische Analyse
+Linguistische Komplexität deutscher und englischer Rechtssprache – eine crosslinguistische Analyse von EU-Verordnungstexten
 
 1. Beschreibung
 
