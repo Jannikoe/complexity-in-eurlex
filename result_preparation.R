@@ -33,9 +33,6 @@ red_german1 <- t(red_german1)
 NA_vars_de <- as.data.frame(which(is.na(red_german1), arr.ind=TRUE))
 NA_vars_en <- as.data.frame(which(is.na(red_english1), arr.ind=TRUE))
 
-'NA_indices_de <- unique(NA_vars_de[2])'
-'NA_indices <- union(NA_indices_de,NA_indices_en)'
-
 red_english2 <- red_english1[-NA_vars_en$row,]
 red_german2 <- red_german1[-NA_vars_de$row,]
 
@@ -49,6 +46,7 @@ no_SD_indices <- union(no_SD_de,no_SD_en)
 red_english3 <- red_english2[,-no_SD_indices$col]
 red_german3 <- red_german2[,-no_SD_indices$col]
 
+#german texts with bad punctuation
 red_german_rubbish <- c('de_84.txt','de_208.txt','de_247.txt','de_155.txt',
                            'de_335.txt','de_340.txt','de_349.txt','de_357.txt',
                            'de_673.txt','de_948.txt','de_50.txt','de_51.txt',
