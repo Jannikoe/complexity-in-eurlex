@@ -13,7 +13,7 @@ Zum Laden des Datensatzes ist das datasets-package und pandas notwendig. Hieraus
 
 3. Nutzung
 
-Den erstellten Datensatz speichere ich mit os durch die Iteration einer for-Schleife als eine Sammlung aus txt-Files für die anschließende Analyse mit der nlp-Pipeline CTAP (). Dies kann für die den gewünschten Sprachen entsprechenden Abschnitte wiederholt werden.
+Den erstellten Datensatz speichere ich mit os durch die Iteration einer for-Schleife als eine Sammlung aus txt-Files für die anschließende Analyse mit der nlp-Pipeline CTAP (https://ctapweb.com). Dies kann für die den gewünschten Sprachen entsprechenden Abschnitte wiederholt werden.
 
 Es folgt eine R-Analyse, die die eingelesenen CSV-Dateien zu handhabbaren Datensätzen mit Columns für die Ergebnisse einzelner in CTAP verfügbarer Features umwandelt. NaN-Werte werden entfernt und Nummern zu numerics transformiert. Für einen sinnvollen Vergleich der Ergebnisse für verschiedene Sprachen sollen die beiden Datensätze nun auf ihre gemeinsame Schnittmenge analysierbarer Features reduziert werden.
 
