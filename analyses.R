@@ -1,4 +1,5 @@
-x <- '173'
+#small function for descriptive statistics
+x <- '952'
 mean(red_german3[,x])
 sd(red_german3[,x])
 mean(red_english3[,x])
@@ -6,6 +7,7 @@ sd(red_english3[,x])
 median(red_english3[,x])
 median(red_german3[,x])
 
+#small function for feature distributions
 Feature <- '459'
 Featurename <- "SUBTLEX Word Frequency/Million (N Type)" 
 BOXPLOT <- data.frame(y=c(red_german3_z[,Feature],red_english3_z[,Feature]),
